@@ -12,6 +12,7 @@ def fetch_and_produce_data(api, client):
     feed = gtfs_realtime_pb2.FeedMessage()
     response = requests.get(api)
     feed.ParseFromString(response.content)
+    
     for entity in feed.entity:
         if entity.HasField('vehicle'):
             #提取
@@ -38,18 +39,11 @@ def fetch_and_produce_data(api, client):
                 "longitude": longitude
             }
             client.add_to_stream(STREAM_NAME, data)
-    #print("success")
+            # print(data)
         
 
 
-def consume(client):
-    messages = client.read_from_stream(
-        STREAM_NAME,
-        GROUP_NAME,
-        CONSUMER_NAME
-    )
 
-    print("Read:", messages)
 
 #====================================================================================================================================================================================================================================================================
 #====================================================================================================================================================================================================================================================================
@@ -64,6 +58,4 @@ if __name__ == "__main__":
 
     while True:
         fetch_and_produce_data(api, client)
-        print(idx)
-        print(consume(client))
-        time.sleep(60)
+        time.sleep(5)

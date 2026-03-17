@@ -39,3 +39,5 @@ class RedisClient:
         return messages
 
 
+
+redis_client = RedisClient()
